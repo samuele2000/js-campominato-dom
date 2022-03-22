@@ -1,10 +1,21 @@
-//Generare una griglia di gioco quadrata, simile a quella dello screenshot, in cui ogni cella contiene un numero tra 1 e 100.
-//Quando l'utente clicca su ogni cella, la cella cliccata si colora di azzurro.
-//bonus
-// Permettere all'utente di indicare una difficoltà in base alla quale viene generato un numero variabile di celle:
-// con difficoltà 1 => tra 1 e 100
-// con difficoltà 2 => tra 1 e 81
-// con difficoltà 3 => tra 1 e 49
+/*Copiamo la griglia fatta ieri nella nuova repo e aggiungiamo la logica del gioco (attenzione: non bisogna copiare tutta la cartella dell'esercizio ma solo l'index.html, e le cartelle js/ css/ con i relativi script e fogli di stile, per evitare problemi con l'inizializzazione di git).
+Il computer deve generare 16 numeri casuali nel range dei numeri della griglia: le bombe.
+
+I numeri nella lista delle bombe non possono essere duplicati.
+
+In seguito l'utente clicca su una cella: se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina, altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.
+
+La partita termina quando il giocatore clicca su una bomba o raggiunge il numero massimo possibile di numeri consentiti.
+Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una b.*/
+
+/*BONUS:
+1- quando si clicca su una bomba e finisce la partita, evitare che si possa cliccare su altre celle
+2- quando si clicca su una bomba e finisce la partita, il software scopre tutte le bombe nascoste
+3- l'utente indica un livello di difficoltà in base al quale viene generato un numero variabile di celle:
+con difficoltà 1 => tra 1 e 100
+con difficoltà 2 => tra 1 e 81
+con difficoltà 3 => tra 1 e 49
+Le bombe dovranno essere generate nello stesso range delle caselle di gioco.*/
 
 
 let box = document.getElementById("box")
@@ -17,6 +28,9 @@ var celleLivello = 0;
 
 //numeri random da 0 a 100
 let array = []
+//array per bombe 
+let array2 = []
+let bombeArray = []
 
 
 
@@ -39,20 +53,28 @@ bottone.addEventListener("click",
         }
 
         //funzione per generare numeri random
-        for (y = 1; y <= celleLivello +1; y++ ) {
+        for (y = 1; y <= celleLivello + 1; y++) {
             array.push(y);
         }
+
         function shuffle(array) {
             return array.sort(() => Math.random() - 0.5)
         }
         array = shuffle(array)
         console.log(array)
-        
-        //generare le bombe in base alle difficoltà 
-        //ciclo for per creare le bombe  
-        //creare un array per il numero bombe random 
-        //creare un array dove si estraggono solo 16 bombe 
+
+        //generare le 16 bombe in base 
+        for (z = 1; z <= celleLivello; z++) {
+            array2.push(z);
+        }
+        array2 = shuffle(array2)
+
         //ciclo for per estrarre solo 16 bombe
+        for (bombe = 1; bombe <= 16; bombe++) {
+            bombeArray.push(array2[bombe])
+        }
+        console.log(bombeArray)
+
 
         //ciclo per creare le celle e i numeri in base ai livelli 
         for (i = 1; i <= celleLivello; i++) {
@@ -65,24 +87,26 @@ bottone.addEventListener("click",
             //appendere l'elemento creato dentro il div in html con id box
             box.appendChild(divContainer);
 
-            //fumzione evento cliccato
-            divContainer.addEventListener("click",
-                function () {
+            function addClick() {
+                //confronto tra i numeRI normali e le bombe 
+                if (bombeArray.includes(parseInt(divContainer.innerHTML))) {
+                    //aggiungere una classe con colore rosso se clicco la bomba
+                    this.classList.add("color-bomb");
+                    
+                    
+                } else {
                     //mettere una classe al this
                     this.classList.add("color-cell")
-
-                    //partire col confronto tra i numeir normali e le bombe 
-                    //fare un ciclo if con includes mettendo parseint al this
-                    //aggiungere una classe con colore rosso se la condizione è vera 
                 }
+            }
 
-            )
-
+            divContainer.addEventListener("click", addClick)
         }
+
+
+
+
 
     }
 
-)
-
-
-//utilizzare il removeeventlistener per togliere la funzione al click
+)      

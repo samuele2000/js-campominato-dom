@@ -67,3 +67,7 @@ button{
 .color-cell{
     background-color: var(--background-yellow);
 }
+
+.color-bomb{
+    background-color: rgb(209, 21, 21);
+}
