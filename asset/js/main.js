@@ -1,5 +1,4 @@
-/*Copiamo la griglia fatta ieri nella nuova repo e aggiungiamo la logica del gioco (attenzione: non bisogna copiare tutta la cartella dell'esercizio ma solo l'index.html, e le cartelle js/ css/ con i relativi script e fogli di stile, per evitare problemi con l'inizializzazione di git).
-Il computer deve generare 16 numeri casuali nel range dei numeri della griglia: le bombe.
+/*Il computer deve generare 16 numeri casuali nel range dei numeri della griglia: le bombe.
 
 I numeri nella lista delle bombe non possono essere duplicati.
 
@@ -26,18 +25,20 @@ let bottone = document.getElementById("bottone");
 
 var celleLivello = 0;
 
+let puntiFatti = [];
+
 //numeri random da 0 a 100
 let array = []
 //array per bombe 
 let array2 = []
 let bombeArray = []
 
-
-
 //attivazione gioco al click
 bottone.addEventListener("click",
     function () {
         console.log(livelli.value)
+
+        box.innerHTML = "";
 
         if (livelli.value == "livello medio") {
             celleLivello = 81;
@@ -63,7 +64,7 @@ bottone.addEventListener("click",
         array = shuffle(array)
         console.log(array)
 
-        //generare le 16 bombe in base 
+        //generare le 16 bombe 
         for (z = 1; z <= celleLivello; z++) {
             array2.push(z);
         }
@@ -87,26 +88,23 @@ bottone.addEventListener("click",
             //appendere l'elemento creato dentro il div in html con id box
             box.appendChild(divContainer);
 
+            divContainer.addEventListener("click", addClick);
+
             function addClick() {
                 //confronto tra i numeRI normali e le bombe 
                 if (bombeArray.includes(parseInt(divContainer.innerHTML))) {
                     //aggiungere una classe con colore rosso se clicco la bomba
                     this.classList.add("color-bomb");
-                    
-                    
+                    alert(`Game over! Hai totalizzato ${puntiFatti.length} punti`);
+                    location.reload();
+
+                    //divContainer.removeEventListener("click", addClick)
                 } else {
                     //mettere una classe al this
                     this.classList.add("color-cell")
+                    puntiFatti.push(document.querySelectorAll("color-cell"))
                 }
             }
-
-            divContainer.addEventListener("click", addClick)
         }
-
-
-
-
-
     }
-
-)      
+)
